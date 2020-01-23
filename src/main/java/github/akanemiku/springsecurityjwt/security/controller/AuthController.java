@@ -10,10 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-
-/**
- * @author shuang.kou
- */
 @RestController
 @RequestMapping("/auth")
 //@Api(tags = "权限接口")
