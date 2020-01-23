@@ -40,15 +40,29 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            // 从输入流中获取到登录的信息
-            LoginUser loginUser = objectMapper.readValue(request.getInputStream(), LoginUser.class);
+            /**
+             * 从输入流中获取到登录的信息
+             * postman中raw json 可行
+             * ajax中data格式为json(JSON.stringify) 不可行，调试可知数据一致原因未知
+             * 无需添加contentType: 'application/json'原因未知
+             */
+//            LoginUser loginUser = objectMapper.readValue(request.getInputStream(), LoginUser.class);
+            /**
+             * 不用json格式
+             * ajax中无需添加contentType
+             * data格式为object
+             */
+            LoginUser loginUser = new LoginUser();
+            loginUser.setUsername(request.getParameter("username"));
+            loginUser.setPassword(request.getParameter("password"));
+            loginUser.setRememberMe(Boolean.valueOf(request.getParameter("rememberMe")));
             rememberMe.set(loginUser.getRememberMe());
             // 这部分和attemptAuthentication方法中的源码是一样的，
             // 只不过由于这个方法源码的是把用户名和密码这些参数的名字是死的，所以我们重写了一下
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     loginUser.getUsername(), loginUser.getPassword());
             return authenticationManager.authenticate(authRequest);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
