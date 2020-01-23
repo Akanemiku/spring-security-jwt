@@ -1,0 +1,19 @@
+server:
+  port: 9000
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/jwt_test?serverTimezone=GMT%2B8&useSSL=false&characterEncoding=UTF-8
+    username: root
+    password: 6458
+    platform: h2
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: true
