@@ -9,7 +9,7 @@
     <script>
         $(function () {
             $('#btn').click(function () {
-                const token =  $.cookie('token');
+                const token =  $.cookie('token');//从cookie中取token
                 console.log(token);
                 $('#btn').click(function () {
                     $.ajax({
@@ -18,15 +18,17 @@
                         contentType: 'application/json',
                         dataType:'text',
                         headers: {
-                            Authorization: token //这里是Token
+                            Authorization: token //将token放入headers
                         },
                         // data:data,
                         success: function (result,status,XHR) {
-                            console.log(result);
-                            console.log(status);
+                            alert("操作成功！！！！！！！！");
+                            console.log(JSON.stringify(result));
+                            console.log(JSON.stringify(status));
                         },
                         error:function (result) {
-                            alert("bbbbbbbbbbbbbbbbbb");
+                            console.log(JSON.stringify(result));
+                            alert("操作出现错误！！！！！！！！");
                         }
                     });
                 });

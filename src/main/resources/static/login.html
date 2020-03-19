@@ -22,21 +22,23 @@
             const password = $("#password").val();
             var data = {"username": username, "password": password, "rememberMe": true};
             console.log(data);
+            console.log(JSON.stringify(data));
             $.ajax({
                 url: 'http://localhost:9000/auth/login',
                 type:'post',
-                // contentType: 'application/json',不可添加
-                dataType:'text',
-                data: data,
-                // data:data,
+                contentType: 'application/json;charset=utf-8',//添加传输格式
+                // dataType:'json',不能添加!!!!!!!!!!
+                data: JSON.stringify(data),//将对象转为json
                 success: function (result,status,XHR) {
                     const token = XHR.getResponseHeader("Authorization");
                     console.log(token);
                     // 保存token用来判断用户是否登录，和身份是否属实
                     $.cookie('token', token,{expires: time});
+                    //localStorage.setItem('token', token);
                 },
                 error:function (result) {
-                    alert("bbbbbbbbbbbbbbbbbb");
+                    console.log(JSON.stringify(result));
+                    alert("登录出现错误！！！！！！！！");
                 }
             });
         }
