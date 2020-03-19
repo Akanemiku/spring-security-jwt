@@ -6,8 +6,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /**
- * @author shuang.kou
  * 获取当前请求的用户
+ *
+ * 当认证成功的用户访问系统的时候，它的认证信息会被设置在 Spring Security 全局中
+ * 可通过SecurityContextHolder.getContext().getAuthentication();获得当前登录用户的授权信息
  */
 @Component
 public class CurrentUser {

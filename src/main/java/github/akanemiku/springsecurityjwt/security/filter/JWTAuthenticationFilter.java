@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author shuang.kou
+ * 认证过滤器
+ *
+ * 根据用户的用户名和密码进行登录验证(用户请求中必须有用户名和密码这两个参数)
  * 如果用户名和密码正确，那么过滤器将创建一个JWT Token 并在HTTP Response 的header中返回它，格式：token: "Bearer +具体token值"
  */
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -38,7 +40,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
 
-        ObjectMapper objectMapper = new ObjectMapper();
+//        ObjectMapper objectMapper = new ObjectMapper();
         try {
             /**
              * 从输入流中获取到登录的信息
@@ -61,7 +63,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // 只不过由于这个方法源码的是把用户名和密码这些参数的名字是死的，所以我们重写了一下
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     loginUser.getUsername(), loginUser.getPassword());
+
+            // 对用户进行认证，会跳转到UserDetailsServiceImpl，执行loadUserByUsername()方法进行验证
+            // 在SecurityConfig中配置了AuthenticationManager使用自定义的userDetailsService
+            // 验证成功会返回完整的包括授予权限的Authentication对象，然后调用下方successfulAuthentication()
             return authenticationManager.authenticate(authRequest);
+
         } catch (Exception e) {
             e.printStackTrace();
             return authenticationManager.authenticate(null);
@@ -78,6 +85,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             Authentication authentication) {
 
         JwtUser jwtUser = (JwtUser) authentication.getPrincipal();
+        //获得所有角色
         List<String> roles = jwtUser.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)

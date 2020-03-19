@@ -27,6 +27,7 @@ public class JwtTokenUtils {
     private static SecretKey secretKey = Keys.hmacShaKeyFor(apiKeySecretBytes);
 
     public static String createToken(String username, List<String> roles, boolean isRememberMe) {
+        //判断是否勾选记住我，勾选后过期时间变长
         long expiration = isRememberMe ? SecurityConstants.EXPIRATION_REMEMBER : SecurityConstants.EXPIRATION;
 
         String tokenPrefix = Jwts.builder()

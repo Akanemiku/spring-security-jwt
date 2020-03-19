@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 密码编码器
+     * 存入数据库的密码需要被加密
      */
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -40,6 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return userDetailsServiceImpl;
     }
 
+    /**
+     * 配置AuthenticationManager使用自定义的UserDetailsServiceImpl去验证用户信息
+     * @param auth
+     * @throws Exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 设置自定义的userDetailsService以及密码编码器
