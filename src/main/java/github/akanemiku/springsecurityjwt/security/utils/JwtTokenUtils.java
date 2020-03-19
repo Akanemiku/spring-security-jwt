@@ -34,7 +34,7 @@ public class JwtTokenUtils {
                 .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .claim(SecurityConstants.ROLE_CLAIMS, String.join(",", roles))
-                .setIssuer("SnailClimb")
+                .setIssuer("Akane")
                 .setIssuedAt(new Date())
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000))
@@ -42,17 +42,29 @@ public class JwtTokenUtils {
         return SecurityConstants.TOKEN_PREFIX + tokenPrefix;
     }
 
+    /**
+     * 判断token是否过期
+     * @param token
+     * @return
+     */
     private boolean isTokenExpired(String token) {
         Date expiredDate = getTokenBody(token).getExpiration();
         return expiredDate.before(new Date());
     }
 
+    /**
+     * 通过token获取用户名
+     * @param token
+     * @return
+     */
     public static String getUsernameByToken(String token) {
         return getTokenBody(token).getSubject();
     }
 
     /**
-     * 获取用户所有角色
+     * 通过token获取改用户所有角色
+     * @param token
+     * @return
      */
     public static List<SimpleGrantedAuthority> getUserRolesByToken(String token) {
         String role = (String) getTokenBody(token)
@@ -62,6 +74,11 @@ public class JwtTokenUtils {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 通过token反解析出内容
+     * @param token
+     * @return
+     */
     private static Claims getTokenBody(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
