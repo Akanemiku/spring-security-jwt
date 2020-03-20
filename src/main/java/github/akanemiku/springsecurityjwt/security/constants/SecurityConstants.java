@@ -1,8 +1,5 @@
 package github.akanemiku.springsecurityjwt.security.constants;
 
-/**
- * @author shuang.kou
- */
 public class SecurityConstants {
 
     /**
